@@ -2,6 +2,8 @@
 
 A zero-dependency, HttpURLConnection-based HTTP client in Kotlin for basic use cases.
 
+This library defines a set of extension functions on Java's `java.net.URL` class, each corresponding to an HTTP verb such as *get*.  A URL instance defines the *where* of an HTTP action.  Each extension function defines a function block in which a client can provide a lambda to do work against the response.  The lambda is provided the HTTP status code, the headers in the response, and the optional response body as an input stream.  Once the lambda completes execution, the underlying HTTP connection is closed.  The lambda may also provide a type specification of something desired to be passed back to the client program, such as a deserialized form of the response.
+
 ## Install
 
 ### Gradle via JitPack
