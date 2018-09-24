@@ -7,15 +7,15 @@ A zero-dependency, HttpURLConnection-based HTTP client in Kotlin for basic use c
 ### Gradle via JitPack
 
 ```gradle
-    allprojects {
-        repositories {
-            ...
-            maven { url "https://jitpack.io" }
-        }
-   }
-   dependencies {
-        implementation 'com.github.kgilmer:I-Dentist:61d780101b868079367395389f966153a9906785'
-   }
+allprojects {
+    repositories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+}
+dependencies {
+    implementation 'com.github.kgilmer:I-Dentist:f53c21117d636f7a7963c2354030edd2d06e1b64'
+}
 ```
 
 ## Features
@@ -24,11 +24,11 @@ A zero-dependency, HttpURLConnection-based HTTP client in Kotlin for basic use c
 * Integration tests via Jetty
 * Did I mention there are no dependencies?
 * One file, MIT Licensed.
-* API implemented entirely as extension functions.  Zero-volume API surface area.
+* API implemented entirely as extension functions.  No new top-level classes or interfaces to deal with.
 * Less than 50 LoC.
 * Connection is managed by the function, nothing to clean up.
 * API enables painless deserialization into native forms:
-```
+```kotlin
 // Given an object form of some HTTP response
 data class MyDataClass(val foo: String)
 
@@ -36,7 +36,7 @@ data class MyDataClass(val foo: String)
 fun deserialize(input: InputStream): MyDataClass =
         MyDataClass(input.readBytes().toString(Charset.defaultCharset()))
 
-// Give me the deserialized object
+// Using I-Dentist, give me the deserialized object
 val data = URL("http://mydata.org").httpGet { _, _, body ->
     return@httpGet deserialize(body!!)
 }
