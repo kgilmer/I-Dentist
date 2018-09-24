@@ -37,9 +37,7 @@ fun deserialize(input: InputStream): MyDataClass =
         MyDataClass(input.readBytes().toString(Charset.defaultCharset()))
 
 // Using I-Dentist, give me the deserialized object
-val data = URL("http://mydata.org").httpGet { _, _, body ->
-    return@httpGet deserialize(body!!)
-}
+val data = URL("data.org").httpGet { _, _, body -> deserialize(body!!) }
 
 println(data.foo)
 ```
@@ -49,13 +47,15 @@ println(data.foo)
 ### HTTP Get
 
 ```kotlin
-URL("http://somewebsite.com/somepath").httpGet(mapOf("some-header" to "myval"))
+val html = URL("http://somewebsite.com").httpGet(mapOf("some-header" to "myval")) { _, _, body ->
+    body?.readBytes().toString(Charset.defaultCharset())
+}
 ```
 
 ### HTTP Post
 
 ```kotlin
-URL("http://somewebsite.com/somepath").httpPost("{}".byteInputStream()) { statusCode, headers, body ->
+URL("http://somewebsite.com").httpPost("{}".byteInputStream()) { statusCode, headers, body ->
     when (statusCode) {
       200 -> handleSuccess(body!!)
       else -> throw IllegalArgumentException("Something bad happened...")
