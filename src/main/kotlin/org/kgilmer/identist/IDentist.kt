@@ -1,37 +1,32 @@
 package org.kgilmer.identist
 
+import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-fun URL.httpGet(headers: Map<String, String> = mapOf()): Triple<Int, Map<String, List<String>>, InputStream?> =
-        this.http(headers, null) { }
+fun <T> URL.httpGet(headers: Map<String, String> = mapOf(), action: (Int, Map<String, List<String>>, InputStream?) -> T): T =
+        this.http(headers, null, { }, action)
 
-fun URL.httpPost(headers: Map<String, String> = mapOf(), body: InputStream? = null): Triple<Int, Map<String, List<String>>, InputStream?> =
-        this.http(headers, body) { connection ->
+fun <T> URL.httpPost(headers: Map<String, String> = mapOf(), body: InputStream? = null, action: (Int, Map<String, List<String>>, InputStream?) -> T): T =
+        this.http(headers, body, { connection ->
             connection.doOutput = true
             connection.requestMethod = "POST"
-        }
+        }, action)
 
-fun URL.httpPost(headers: Map<String, String> = mapOf(), body: () -> InputStream): Triple<Int, Map<String, List<String>>, InputStream?> =
-    this.httpPost(headers, body.invoke())
-
-fun URL.httpPut(headers: Map<String, String> = mapOf(), body: InputStream? = null): Triple<Int, Map<String, List<String>>, InputStream?> =
-        this.http(headers, body) { connection ->
+fun <T> URL.httpPut(headers: Map<String, String> = mapOf(), body: InputStream? = null, action: (Int, Map<String, List<String>>, InputStream?) -> T): T =
+        this.http(headers, body, { connection ->
             connection.doOutput = true
             connection.requestMethod = "PUT"
-        }
+        }, action)
 
-fun URL.httpPut(headers: Map<String, String> = mapOf(), body: () -> InputStream): Triple<Int, Map<String, List<String>>, InputStream?> =
-        this.httpPut(headers, body.invoke())
-
-fun URL.httpDelete(headers: Map<String, String> = mapOf()): Triple<Int, Map<String, List<String>>, InputStream?> =
-        this.http(headers, null) { connection ->
+fun <T> URL.httpDelete(headers: Map<String, String> = mapOf(), action: (Int, Map<String, List<String>>, InputStream?) -> T): T =
+        this.http(headers, null, { connection ->
             connection.requestMethod = "DELETE"
             connection.doOutput = true
-        }
+        }, action)
 
-private fun URL.http(headers: Map<String, String> = mapOf(), body: InputStream? = null, connectionVisitor: (HttpURLConnection) -> Unit): Triple<Int, Map<String, List<String>>, InputStream?> {
+private fun <T> URL.http(headers: Map<String, String> = mapOf(), body: InputStream? = null, connectionVisitor: (HttpURLConnection) -> Unit, action: (Int, Map<String, List<String>>, InputStream?) -> T): T {
     val connection = this.openConnection() as HttpURLConnection
     connectionVisitor(connection)
 
@@ -39,5 +34,12 @@ private fun URL.http(headers: Map<String, String> = mapOf(), body: InputStream? 
 
     body?.apply { this.copyTo(connection.outputStream) }
 
-    return Triple(connection.responseCode, connection.headerFields, connection.inputStream)
+    try {
+        val returnValue = action(connection.responseCode, connection.headerFields, connection.inputStream)
+        connection.disconnect()
+        return returnValue
+    } catch (e: IOException) {
+        connection.disconnect()
+        throw e
+    }
 }
