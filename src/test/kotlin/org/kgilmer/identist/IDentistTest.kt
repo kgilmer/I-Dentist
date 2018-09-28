@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.InputStream
+import java.io.PrintWriter
 import java.net.URL
 import java.nio.charset.Charset
 import javax.servlet.http.HttpServletRequest
@@ -28,7 +29,8 @@ class IDentistTest {
 
         val url = URL("http://localhost:8080/")
 
-        url.httpGet(mapOf("content-type" to "application/json")) { statusCode, headers, body ->
+        val logger = PrintWriter(System.out)
+        url.httpGet(mapOf("content-type" to "application/json"), logger = logger) { statusCode, headers, body ->
             assertTrue("success response code", statusCode == 200)
             assertTrue("has body", body != null)
             assertTrue("has headers", headers.isNotEmpty())
@@ -36,6 +38,7 @@ class IDentistTest {
         }
 
         jettyServer.stop()
+        logger.flush()
     }
 
     @Test
@@ -78,8 +81,9 @@ class IDentistTest {
         }
 
         val url = URL("http://localhost:8080/")
+        val logger = PrintWriter(System.out)
 
-        url.httpPost(mapOf("content-type" to "application/json"), "test".byteInputStream()) { statusCode, headers, body ->
+        url.httpPost(headers = mapOf("content-type" to "application/json"), body = "test".byteInputStream(), logger = logger) { statusCode, headers, body ->
             assertTrue("success response code", statusCode == 200)
             assertTrue("has body", body != null)
             assertTrue("has headers", headers.isNotEmpty())
@@ -87,6 +91,7 @@ class IDentistTest {
         }
 
         jettyServer.stop()
+        logger.flush()
     }
 
     @Test
@@ -105,7 +110,7 @@ class IDentistTest {
 
         val url = URL("http://localhost:8080/")
 
-        url.httpPost(mapOf("content-type" to "application/json"), "test".byteInputStream()) { statusCode, headers, body ->
+        url.httpPost(headers = mapOf("content-type" to "application/json"), body = "test".byteInputStream()) { statusCode, headers, body ->
             assertTrue("success response code", statusCode == 200)
             assertTrue("has body", body != null)
             assertTrue("has headers", headers.isNotEmpty())
@@ -130,7 +135,7 @@ class IDentistTest {
 
         val url = URL("http://localhost:8080/")
 
-        url.httpPut(mapOf("content-type" to "application/json")) { statusCode, headers, body ->
+        url.httpPut(headers = mapOf("content-type" to "application/json")) { statusCode, headers, body ->
             assertTrue("success response code", statusCode == 200)
             assertTrue("has body", body != null)
             assertTrue("has headers", headers.isNotEmpty())
@@ -156,7 +161,7 @@ class IDentistTest {
 
         val url = URL("http://localhost:8080/")
 
-        url.httpPut(mapOf("content-type" to "application/json"), "test".byteInputStream()) { statusCode, headers, body ->
+        url.httpPut(headers = mapOf("content-type" to "application/json"), body = "test".byteInputStream()) { statusCode, headers, body ->
             assertTrue("success response code", statusCode == 200)
             assertTrue("has body", body != null)
             assertTrue("has headers", headers.isNotEmpty())
@@ -182,7 +187,7 @@ class IDentistTest {
 
         val url = URL("http://localhost:8080/")
 
-        url.httpPut(mapOf("content-type" to "application/json"), "test".byteInputStream()) { statusCode, headers, body ->
+        url.httpPut(headers = mapOf("content-type" to "application/json"), body = "test".byteInputStream()) { statusCode, headers, body ->
             assertTrue("success response code", statusCode == 200)
             assertTrue("has body", body != null)
             assertTrue("has headers", headers.isNotEmpty())
@@ -207,7 +212,7 @@ class IDentistTest {
 
         val url = URL("http://localhost:8080/")
 
-        url.httpDelete(mapOf("content-type" to "application/json")) { statusCode, headers, body ->
+        url.httpDelete(headers = mapOf("content-type" to "application/json")) { statusCode, headers, body ->
             assertTrue("success response code", statusCode == 200)
             assertTrue("has body", body != null)
             assertTrue("has headers", headers.isNotEmpty())
