@@ -80,6 +80,6 @@ allprojects {
     }
 }
 dependencies {
-    implementation 'com.github.kgilmer:I-Dentist:f53c21117d636f7a7963c2354030edd2d06e1b64'
+    implementation 'com.github.kgilmer:I-Dentist:765a32f01173e256d2336fcd42125082877ea6bf'
 }
 ```
