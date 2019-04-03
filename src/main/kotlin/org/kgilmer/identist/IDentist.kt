@@ -110,6 +110,7 @@ private fun <T> URL.http(
     } catch (e: IOException) {
         connection.disconnect()
         logger?.println("<-- status: ${connection.responseCode} headers: ${connection.headerFields}")
+        logger?.flush()
         errorHandler(connection, e)
     }
 }
