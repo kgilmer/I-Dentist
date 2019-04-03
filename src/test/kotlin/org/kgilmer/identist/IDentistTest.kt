@@ -15,7 +15,7 @@ class IDentistTest {
     @Test
     fun testHttpGet() {
         val jettyServer =
-            startServer(8080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
+            startServer(6080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
                 assertTrue("path is as expected", s == "/")
                 assertTrue("GET called", request!!.method == "GET")
                 assertTrue(
@@ -29,7 +29,7 @@ class IDentistTest {
                 request.isHandled = true
             }
 
-        val url = URL("http://localhost:8080/")
+        val url = URL("http://localhost:6080/")
 
         val logger = PrintWriter(System.out)
         url.httpGet(mapOf("content-type" to "application/json"), logger = logger) { statusCode, headers, body ->
@@ -46,7 +46,7 @@ class IDentistTest {
     @Test
     fun testHttpPostNoBody() {
         val jettyServer =
-            startServer(8080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
+            startServer(6080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
                 assertTrue("path is as expected", s == "/")
                 assertTrue("POST called", request!!.method == "POST")
                 assertTrue(
@@ -60,7 +60,7 @@ class IDentistTest {
                 request.isHandled = true
             }
 
-        val url = URL("http://localhost:8080/")
+        val url = URL("http://localhost:6080/")
 
         url.httpPost(mapOf("content-type" to "application/json")) { statusCode, headers, body ->
             assertTrue("success response code", statusCode == 200)
@@ -75,7 +75,7 @@ class IDentistTest {
     @Test
     fun testHttpPost() {
         val jettyServer =
-            startServer(8080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
+            startServer(6080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
                 assertTrue("path is as expected", s == "/")
                 assertTrue("POST called", request!!.method == "POST")
                 assertTrue(
@@ -90,7 +90,7 @@ class IDentistTest {
                 request.isHandled = true
             }
 
-        val url = URL("http://localhost:8080/")
+        val url = URL("http://localhost:6080/")
         val logger = PrintWriter(System.out)
 
         url.httpPost(
@@ -111,7 +111,7 @@ class IDentistTest {
     @Test
     fun testHttpPostLambda() {
         val jettyServer =
-            startServer(8080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
+            startServer(6080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
                 assertTrue("path is as expected", s == "/")
                 assertTrue("POST called", request!!.method == "POST")
                 assertTrue(
@@ -126,7 +126,7 @@ class IDentistTest {
                 request.isHandled = true
             }
 
-        val url = URL("http://localhost:8080/")
+        val url = URL("http://localhost:6080/")
 
         url.httpPost(
             headers = mapOf("content-type" to "application/json"),
@@ -144,7 +144,7 @@ class IDentistTest {
     @Test
     fun testHttpPutNoBody() {
         val jettyServer =
-            startServer(8080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
+            startServer(6080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
                 assertTrue("path is as expected", s == "/")
                 assertTrue("POST called", request!!.method == "PUT")
                 assertTrue(
@@ -158,7 +158,7 @@ class IDentistTest {
                 request.isHandled = true
             }
 
-        val url = URL("http://localhost:8080/")
+        val url = URL("http://localhost:6080/")
 
         url.httpPut(headers = mapOf("content-type" to "application/json")) { statusCode, headers, body ->
             assertTrue("success response code", statusCode == 200)
@@ -173,7 +173,7 @@ class IDentistTest {
     @Test
     fun testHttpPut() {
         val jettyServer =
-            startServer(8080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
+            startServer(6080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
                 assertTrue("path is as expected", s == "/")
                 assertTrue("POST called", request!!.method == "PUT")
                 assertTrue(
@@ -188,7 +188,7 @@ class IDentistTest {
                 request.isHandled = true
             }
 
-        val url = URL("http://localhost:8080/")
+        val url = URL("http://localhost:6080/")
 
         url.httpPut(
             headers = mapOf("content-type" to "application/json"),
@@ -206,7 +206,7 @@ class IDentistTest {
     @Test
     fun testHttpPutLambda() {
         val jettyServer =
-            startServer(8080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
+            startServer(6080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
                 assertTrue("path is as expected", s == "/")
                 assertTrue("POST called", request!!.method == "PUT")
                 assertTrue(
@@ -221,7 +221,7 @@ class IDentistTest {
                 request.isHandled = true
             }
 
-        val url = URL("http://localhost:8080/")
+        val url = URL("http://localhost:6080/")
 
         url.httpPut(
             headers = mapOf("content-type" to "application/json"),
@@ -239,7 +239,7 @@ class IDentistTest {
     @Test
     fun testHttpDelete() {
         val jettyServer =
-            startServer(8080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
+            startServer(6080) { s: String?, request: Request?, _: HttpServletRequest?, httpServletResponse: HttpServletResponse? ->
                 assertTrue("path is as expected", s == "/")
                 assertTrue("DELETE called", request!!.method == "DELETE")
                 assertTrue(
@@ -253,7 +253,7 @@ class IDentistTest {
                 request.isHandled = true
             }
 
-        val url = URL("http://localhost:8080/")
+        val url = URL("http://localhost:6080/")
 
         url.httpDelete(headers = mapOf("content-type" to "application/json")) { statusCode, headers, body ->
             assertTrue("success response code", statusCode == 200)

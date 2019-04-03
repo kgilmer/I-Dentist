@@ -100,7 +100,13 @@ private fun <T> URL.http(
     logger?.println("--> Headers: $headers")
     headers.forEach { t, u -> connection.setRequestProperty(t, u) }
 
-    body?.apply { this.copyTo(connection.outputStream) }
+    if (body != null && logger != null) {
+        val bodyContent = body.readBytes()
+        logger.println("--> Body: ${String(bodyContent)}")
+        connection.outputStream.write(bodyContent)
+    } else {
+        body?.apply { this.copyTo(connection.outputStream) }
+    }
 
     return try {
         val returnValue = action(connection.responseCode, connection.headerFields, connection.inputStream)
